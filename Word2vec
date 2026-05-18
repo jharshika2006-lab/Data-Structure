@@ -1,0 +1,54 @@
+
+ 
+# Word2Vec model
+from gensim.models import Word2Vec
+ 
+# Text preprocessing
+import re
+ 
+corpus = [
+   "Machine learning is fascinating",
+   "Deep learning is a subset of machine learning",
+   "Natural language processing uses machine learning",
+   "Word embeddings capture semantic meaning",
+   "Word2Vec is a popular embedding technique"
+]
+def preprocess(text):
+   text = text.lower()
+   text = re.sub(r'[^a-z\s]', '', text)
+   return text.split()
+ 
+sentences = [preprocess(sentence) for sentence in corpus]
+ 
+print("Tokenized Sentences:")
+print(sentences)
+model = Word2Vec(
+   sentences=sentences,
+   vector_size=50,   # Size of word embedding
+   window=3,         # Context window size
+   min_count=1,      # Minimum word frequency
+   workers=4,        # Number of CPU threads
+   sg=1              # 1 = Skip-gram, 0 = CBOW
+)
+model = Word2Vec(
+   sentences=sentences,
+   vector_size=50,   # Size of word embedding
+   window=3,         # Context window size
+   min_count=1,      # Minimum word frequency
+   workers=4,        # Number of CPU threads
+   sg=1              # 1 = Skip-gram, 0 = CBOW
+)
+# Vocabulary
+print("\nVocabulary:")
+print(model.wv.index_to_key)
+ 
+# Word embedding for a specific word
+vector = model.wv['learning']
+print("\nWord Embedding for 'learning':")
+print(vector)
+print("\nEmbedding dimension:", len(vector))
+similar_words = model.wv.most_similar('learning', topn=3)
+ 
+print("\nWords similar to 'learning':")
+for word, score in similar_words:
+   print(word, ":", score)
